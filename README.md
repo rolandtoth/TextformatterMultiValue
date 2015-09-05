@@ -1,3 +1,6 @@
+MultiValue Textformatter for ProcessWire
+================
+
 Converts strings with separators to object properties.
 Works with field types Text and Textarea.
 
