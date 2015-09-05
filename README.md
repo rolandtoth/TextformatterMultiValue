@@ -47,13 +47,18 @@ If the first line begins with the "@" character it indicates it contains row hea
 
 ```txt
 @ url ::: title ::: target
-Facebook = https://facebook.com/my-company ::: Follow us on Facebook ::: _blank
+Facebook = https://facebook.com/mycompany ::: Follow us on Facebook ::: _blank
+Linkedin = https://www.linkedin.com/mycompany ::: NULL ::: _blank
+Email = #contact ::: Contact
 ```
 Row headers are optional but thely will help you retrieving items. 
 For example, to get the "title" item, use this:
 
 ```php
 echo $page->my_field->facebook->title
+// result: "Follow us on Facebook"
+
+echo $page->my_field->email->title
 // result: "Follow us on Facebook"
 ```
 
