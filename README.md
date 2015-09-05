@@ -4,7 +4,7 @@ MultiValue Textformatter for ProcessWire
 Converts strings with separators to object properties.
 Works with field types Text and Textarea.
 
-Great for setting up site-wide settings variables using only a simple textarea, or listing social links easily.
+Great for setting up site-wide settings variables using only a simple textarea or listing social links, etc.
 
 Features
 ---------------------------------------
@@ -75,7 +75,7 @@ However, the order of the item is important, so if an item is not needed, substi
 
 ```txt
 @ url ::: title ::: target
-Linkedin = https://www.linkedin.com/my-company ::: NULL ::: _blank
+Linkedin = https://www.linkedin.com/mycompany ::: NULL ::: _blank
 ```
 
 In the example above "$page->my_field->linkedin->title" will be an empty string.
