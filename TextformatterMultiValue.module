@@ -1,0 +1,237 @@
+<?php
+
+/**
+ * MultiValue ProcessWire textformatter
+ *
+ * Converts strings with separators to object properties.
+ *
+ * @created 03/09/2015
+ * @last_modified 05/09/2015
+ *
+ * ProcessWire 2.x
+ *
+ * @author Roland Toth (tpr) (http://rolandtoth.hu/)
+ *
+ */
+
+/**
+ * Cheat sheet
+ *
+ * $page->field->key            // item value
+ * $page->field->key->value     // item value
+ * $page->field->key->value2    // third item value (if no headers set, value0, value1, ...)
+ * $page->field->key->name      // human readable key name
+ * $page->field->key->count     // number of row items
+ * $page->field                 // original field value (no modification)
+ * $page->field->count          // number of field rows
+ * $page->field->original       // original field value (no modification)
+ */
+
+/**
+ * Class TextformatterMultiValue
+ */
+class TextformatterMultiValue extends Textformatter {
+
+    private $header_row_identifier = "@";
+    private $key_separator = "=";
+    private $value_separator = ":::";
+    private $comment_identifier = "//";
+    private $allowed_field_types = array("FieldtypeText", "FieldtypeTextLanguage", "FieldtypeTextarea", "FieldtypeTextareaLanguage");
+
+    /**
+     * Return module information.
+     *
+     * @return array Module info
+     */
+    public static function getModuleInfo() {
+        return array(
+            'title' => 'MultiValue Textformatter',
+            'summary' => 'Converts strings with separators to object properties.',
+            'author' => 'Roland Toth',
+            'version' => 100
+        );
+    }
+
+    /**
+     * Format the given text string.
+     *
+     * @param Page $page
+     * @param Field $field
+     * @param string $value
+     */
+    public function formatValue(Page $page, Field $field, &$value) {
+
+        // allow only in textarea and text field types
+        if (!in_array($field->type, $this->allowed_field_types)) {
+            return;
+        }
+
+        if ($value != '') {
+
+            // get headers array
+            $headers = $this->getHeaders($value);
+
+            $list = trim($value);
+            $list = explode("\n", $list);
+            $list = array_filter($list, 'trim');
+
+            $result = new MultiValue();
+
+            // loop through rows of the list
+            foreach ($list as $row) {
+
+                //	skip if no key separator (mandatory)
+                if (strpos($row, $this->key_separator) === false) {
+                    return;
+                }
+
+                // skip items commented out
+                if (substr($row, 0, strlen($this->comment_identifier)) === $this->comment_identifier) {
+                    continue;
+                }
+
+                // skip if it's the header row
+                if (substr($row, 0, strlen($this->header_row_identifier)) === $this->header_row_identifier) {
+                    continue;
+                }
+
+                $key_name = $this->getKey($row);
+                $row_items = $this->getRowItems($row, $key_name);
+
+                $key = trim(strtolower(wire('sanitizer')->name($key_name)));
+
+                $i = 0;
+
+                foreach ($row_items as $item) {
+
+                    $item = trim($item);
+
+                    // set placeholder item value to empty string
+                    $item = ($item == "NULL") ? "" : $item;
+
+                    // set object property names
+                    if (isset($headers[$i])) {
+                        $header = $headers[$i];
+                    } else {
+                        $header = "value" . $i;
+                    }
+
+                    if (!is_object($result->$key)) {
+                        $result->$key = new MultiValueRow();
+                    }
+
+                    if ($i == 0) {
+                        // set common properties
+                        $result->$key->name = $key_name;
+                        $result->$key->key = $key;
+                        $result->$key->value = $item;
+                        $result->$key->count = count($row_items);
+                    }
+
+                    $result->$key->$header = $item;
+
+                    $i++;
+                }
+            }
+
+            // set "count" property on field
+            $result->count = count(get_object_vars($result));
+
+            // add common properties
+            $result->original = $value;
+
+            $value = $result;
+        }
+    }
+
+    /**
+     * Get an array of row headers.
+     *
+     * @param $str
+     * @return array|bool|mixed
+     */
+    public function getHeaders($str) {
+
+        // return if no headers set
+        if (strpos($str, $this->header_row_identifier) !== 0) {
+            return false;
+        }
+
+        $first_row = strstr($str, "\n", true);
+
+        // remove separator from the beginning
+        $items = substr_replace($first_row, "", 0, strlen($this->key_separator));
+        $items = explode($this->value_separator, $items);
+        $items = array_map(array($this, "stripper"), $items);
+
+        return $items;
+    }
+
+
+    /**
+     * Get the key part of the row.
+     *
+     * @param $str
+     * @return string
+     */
+    public function getKey($str) {
+        $items = explode($this->key_separator, $str);
+        return trim($items[0]);
+    }
+
+    /**
+     * Explode row values to an array.
+     *
+     * @param $row
+     * @param $key_name
+     * @return array items in a row
+     */
+    public function getRowItems($row, $key_name) {
+        // remove key and key separator
+        $items = substr_replace($row, "", 0, strlen($key_name));
+        $items = trim($items);
+        $items = ltrim($items, $this->key_separator);
+
+        // explode and trim
+        $items = explode($this->value_separator, $items);
+        $items = array_map(array($this, "stripper"), $items);
+
+        return $items;
+    }
+
+    public function stripper($element) {
+        return trim($element);
+    }
+}
+
+
+/**
+ * Class MultiValue
+ */
+class MultiValue {
+
+    /**
+     * Return original field value when called directly.
+     *
+     * @return string
+     */
+    public function __toString() {
+        return isset($this->original) ? $this->original : "";
+    }
+}
+
+
+/**
+ * Class MultiValueRow
+ */
+class MultiValueRow {
+
+    /**
+     * Return key value when called directly.
+     *
+     * @return string
+     */
+    public function __toString() {
+        return !empty($this->value) ? $this->value : "";
+    }
+}
