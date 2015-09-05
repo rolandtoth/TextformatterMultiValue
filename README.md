@@ -59,7 +59,7 @@ echo $page->my_field->facebook->title
 // result: "Follow us on Facebook"
 
 echo $page->my_field->email->title
-// result: "Follow us on Facebook"
+// result: "Contact"
 ```
 
 If row headers are missing you can get the items using "valueX", where "X" is the index of the item (zero-based!):
@@ -68,7 +68,7 @@ echo $page->my_field->facebook->value1
 // result: "Follow us on Facebook"
 ```
 
-**Number of items**
+**Number and order of items**
 
 You can use any number of items in a row, and rows doesn't need to contain the same number of items.
 However, the order of the item is important, so if an item is not needed, substitute it with the "NULL" placeholder value:
