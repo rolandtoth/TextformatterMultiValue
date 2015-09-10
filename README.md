@@ -1,8 +1,7 @@
 MultiValue Textformatter for ProcessWire
 ================
 
-Converts strings with separators to object properties.
-Works with field types Text and Textarea.
+Allows setting key = value pairs in a textarea or text field to use as variable groups in templates.
 
 Great for setting up site-wide settings variables using only a simple textarea or listing social links, etc.
 
