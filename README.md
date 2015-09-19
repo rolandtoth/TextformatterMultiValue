@@ -1,9 +1,9 @@
 MultiValue Textformatter for ProcessWire
 ================
 
-Set key=value pairs in a textarea or text field to use as variable groups in templates.
+Set flexible data structures in "key = value1, value2, ..." format to use as variable groups in templates.
 
-Great for setting up flexible data structures, eg. general site settings, social links, menus, etc.
+Great for general site settings, social links, menus, etc.
 
 Features
 ---------------------------------------
