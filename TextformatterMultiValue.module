@@ -50,7 +50,7 @@ class TextformatterMultiValue extends Textformatter {
             'author' => 'Roland Toth',
             'href' => 'https://github.com/rolandtoth/TextformatterMultiValue',
             'icon' => 'code',
-            'version' => 110
+            'version' => 120
         );
     }
 
@@ -103,7 +103,7 @@ class TextformatterMultiValue extends Textformatter {
                 $key_name = $this->getKey($row);
                 $row_items = $this->getRowItems($row, $key_name);
 
-                $key = trim(strtolower(wire('sanitizer')->name($key_name)));
+                $key = trim(strtolower(wire('sanitizer')->pageNameTranslate($key_name)));
 
                 $i = 0;
 
