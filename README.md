@@ -3,7 +3,7 @@ MultiValue Textformatter for ProcessWire
 
 Set flexible data structures in "key = value1, value2, ..." format to use as variable groups in templates.
 
-Great for general site settings, social links, menus, etc.
+Great for general site settings, social links, menus, or just grouping items together without creating separate fields.
 
 Features
 ---------------------------------------
@@ -29,7 +29,7 @@ Syntax
 
 **Rows**
 
-Rows contain the "row key" (mandatory) and the items. 
+Rows consists of a "row key" (optional) and item(s).
 The key separator is the "=" and the items separator is ":::".
 
 ```txt
@@ -40,6 +40,22 @@ Row key can be any string, it will be converted to lowercase and sanitized.
 For example the key "Row key" will be converted to "row_key".
 This key will be used for retrieval in template files.
 
+If no key is specified, random keys will be assigned.
+This allows listing items as simply as this:
+
+```txt
+https://player.vimeo.com/video/123456
+https://player.vimeo.com/video/654321
+https://player.vimeo.com/video/321645
+```
+
+Retrieval for the above:
+
+```php
+foreach($page->video_links as $video_link) {
+    echo '<iframe src="' . $video_link . '"></iframe>';
+}
+```
 **Row header**
 
 If the first line begins with the "@" character it indicates it contains row headers.
