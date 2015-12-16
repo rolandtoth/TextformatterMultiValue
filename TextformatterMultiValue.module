@@ -28,7 +28,7 @@
 class TextformatterMultiValue extends Textformatter {
 
 	private $header_row_identifier = "@";
-	private $key_separator = "=";
+	private $key_separator = " = ";
 	private $value_separator = ":::";
 	private $comment_identifier = "//";
 	private $random_key_prefix = "tmfkey_";
@@ -167,8 +167,8 @@ class TextformatterMultiValue extends Textformatter {
 	 */
 	public function getKey($str) {
 
-		// no key exists
-		if(strpos($str, $this->key_separator) === false) {
+		// no key exists or key is empty (row starts with key separator)
+		if(strpos($str, $this->key_separator) === 0 ||strpos($str, $this->key_separator) === false) {
 			return $this->random_key_prefix . $this->generateRandomString();
 		}
 

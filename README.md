@@ -30,7 +30,8 @@ Syntax
 **Rows**
 
 Rows consists of a "row key" (optional) and item(s).
-The key separator is the "=" and the items separator is ":::".
+The key separator is the " = " and the items separator is ":::".
+**Note**: from version 1.3.1 the spaces in the key separator are mandatory.
 
 ```txt
 Row key = Some value ::: Another value ::: Yet another value
@@ -40,8 +41,9 @@ Row key can be any string, it will be converted to lowercase and sanitized.
 For example the key "Row key" will be converted to "row_key".
 This key will be used for retrieval in template files.
 
-If no key is specified, random keys will be assigned.
-This allows listing items as simply as this:
+***No keys mode***
+
+Keys can be optionally left out which allows setting items simply by listing them:
 
 ```txt
 https://player.vimeo.com/video/123456
@@ -56,6 +58,7 @@ foreach($page->video_links as $video_link) {
     echo '<iframe src="' . $video_link . '"></iframe>';
 }
 ```
+
 **Row header**
 
 If the first line begins with the "@" character it indicates it contains row headers.

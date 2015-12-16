@@ -1,5 +1,9 @@
 #Changelog
 
+### 1.3.2 (2015-12-16)
+
+- key separator changed to " = " (spaces are mandatory)
+
 ### 1.3.0 (2015-12-14)
 
 - allow rows without keys
