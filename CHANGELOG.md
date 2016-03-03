@@ -1,5 +1,9 @@
 #Changelog
 
+### 1.3.3 (2016-03-03)
+
+- fixed stripped first char from first header identifier
+
 ### 1.3.2 (2015-12-16)
 
 - key separator changed to " = " (spaces are mandatory)
