@@ -103,6 +103,7 @@ In the example above "$page->my_field->linkedin->title" will be an empty string.
 - when no key is set the unmodified field value is returned ($page->field)
 - get the number of rows using "$page->field->count"
 - get the number of items using "$page->field->key->count"
+- check if a key name is available using "$page->field->hasName"
 
 **Comments**
 
@@ -123,6 +124,7 @@ $page->field->key->name      // human readable key name
 $page->field->key->count     // number of row items
 $page->field                 // original field value (no modification)
 $page->field->count          // number of field rows
+$page->field->hasName        // true if key name is set, false if not
 $page->field->original       // original field value (no modification)
 ```
 
